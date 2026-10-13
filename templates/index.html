@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>TruthScan — The News Intelligence</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Libre+Baskerville:wght@400;700&family=Source+Sans+3:wght@400;500;600;700;800;900&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="page-shell">
+
+    <!-- NEWSPAPER HEADER -->
+    <header class="newspaper-header">
+
+        <div class="top-strip">
+            <span>THE DAILY INTELLIGENCE</span>
+            <span>WEDNESDAY • OCTOBER 2026</span>
+            <span>AI NEWS DESK • EDITION 001</span>
+        </div>
+
+        <div class="brand-row">
+
+            <div class="side-note left">
+                <strong>EST.</strong>
+                <span>2026</span>
+            </div>
+
+            <div class="masthead">
+                <div class="masthead-small">THE</div>
+                <h1>TRUTHSCAN</h1>
+                <div class="masthead-subtitle">
+                    NEWS • FACT • INTELLIGENCE
+                </div>
+            </div>
+
+            <div class="side-note right">
+                <strong>AI</strong>
+                <span>DESK</span>
+            </div>
+
+        </div>
+
+        <div class="headline-rule">
+            <span></span>
+            <strong>THE MACHINE READS BETWEEN THE LINES</strong>
+            <span></span>
+        </div>
+
+    </header>
+
+
+    <main>
+
+        <!-- HERO -->
+        <section class="front-story">
+
+            <div class="story-label">
+                SPECIAL REPORT
+            </div>
+
+            <h2>
+                CAN YOU
+                <em>TRUST</em>
+                WHAT YOU READ?
+            </h2>
+
+            <div class="hero-layout">
+
+                <div class="hero-main">
+
+                    <p class="lead">
+                        <span class="dropcap">T</span>ruthScan uses machine
+                        learning to examine the language and patterns
+                        inside a news article and classify the submitted
+                        story as <b>REAL</b> or <b>FAKE</b>.
+                    </p>
+
+                    <p>
+                        Instead of checking a single keyword, the system
+                        processes the submitted text through a TF-IDF
+                        feature extraction pipeline before sending it
+                        to a trained Logistic Regression classifier.
+                    </p>
+
+                </div>
+
+                <div class="hero-side">
+
+                    <div class="side-card">
+                        <span>MODEL STATUS</span>
+
+                        <div class="status">
+                            <i></i>
+                            ONLINE
+                        </div>
+
+                        <p>
+                            Ready to analyze submitted news text.
+                        </p>
+                    </div>
+
+                    <div class="side-card">
+                        <span>TESTED ON</span>
+                        <strong>44,898</strong>
+                        <p>news articles</p>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- SCANNER -->
+        <section class="scanner-section">
+
+            <div class="section-title">
+
+                <div class="section-number">
+                    01
+                </div>
+
+                <div>
+                    <span>NEWS DESK</span>
+                    <h3>SUBMIT A STORY</h3>
+                </div>
+
+                <div class="section-line"></div>
+
+                <small>
+                    FOR MACHINE ANALYSIS
+                </small>
+
+            </div>
+
+
+            <form method="POST">
+
+                <div class="news-form">
+
+                    <div class="form-headline">
+
+                        <label for="headline">
+                            ARTICLE HEADLINE
+                            <small>OPTIONAL</small>
+                        </label>
+
+                        <input
+                            type="text"
+                            id="headline"
+                            name="headline"
+                            placeholder="Write or paste the headline..."
+                            value="{{ headline }}"
+                        >
+
+                    </div>
+
+
+                    <div class="form-article">
+
+                        <label for="article">
+                            ARTICLE CONTENT
+                            <small>REQUIRED</small>
+                        </label>
+
+                        <textarea
+                            id="article"
+                            name="article"
+                            placeholder="Paste the complete news article here..."
+                            required
+                        >{{ article }}</textarea>
+
+                    </div>
+
+                </div>
+
+
+                <div class="submit-row">
+
+                    <div>
+                        <span>ANALYSIS ENGINE</span>
+                        <strong>TF-IDF / LOGISTIC REGRESSION</strong>
+                    </div>
+
+                    <button type="submit">
+                        <span>SCAN THIS STORY</span>
+                        <b>→</b>
+                    </button>
+
+                </div>
+
+            </form>
+
+        </section>
+
+
+        <!-- RESULT -->
+        {% if prediction %}
+
+        <section class="result-section">
+
+            <div class="section-title">
+
+                <div class="section-number">
+                    02
+                </div>
+
+                <div>
+                    <span>AI NEWS DESK</span>
+                    <h3>ANALYSIS REPORT</h3>
+                </div>
+
+                <div class="section-line"></div>
+
+                <small>
+                    REPORT GENERATED
+                </small>
+
+            </div>
+
+
+            <article class="
+                report
+                {% if prediction == 'FAKE' %}
+                    report-fake
+                {% else %}
+                    report-real
+                {% endif %}
+            ">
+
+                <div class="report-banner">
+
+                    <div>
+                        <span>CLASSIFICATION REPORT</span>
+                        <strong>
+                            MACHINE-GENERATED ANALYSIS
+                        </strong>
+                    </div>
+
+                    {% if prediction == "FAKE" %}
+
+                    <div class="classification-stamp fake">
+                        FAKE
+                    </div>
+
+                    {% else %}
+
+                    <div class="classification-stamp real">
+                        REAL
+                    </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <div class="report-grid">
+
+                    <!-- CONFIDENCE -->
+                    <div class="confidence-box">
+
+                        <span class="eyebrow">
+                            MODEL CONFIDENCE
+                        </span>
+
+                        <div class="confidence-number">
+                            {{ confidence }}<small>%</small>
+                        </div>
+
+                        <div class="confidence-track">
+                            <div
+                                class="confidence-fill"
+                                data-confidence="{{ confidence }}">
+                            </div>
+                        </div>
+
+                        <p>
+                            Confidence represents the probability
+                            assigned by the classifier to its
+                            predicted class.
+                        </p>
+
+                    </div>
+
+
+                    <!-- VERDICT -->
+                    <div class="verdict-box">
+
+                        {% if prediction == "FAKE" %}
+
+                        <span class="verdict-label fake-text">
+                            ⚠ SUSPICIOUS CLASSIFICATION
+                        </span>
+
+                        <h4>FAKE NEWS</h4>
+
+                        <p>
+                            The classifier detected textual patterns
+                            associated with fake news within the
+                            training dataset.
+                        </p>
+
+                        {% else %}
+
+                        <span class="verdict-label real-text">
+                            ✓ REAL CLASSIFICATION
+                        </span>
+
+                        <h4>REAL NEWS</h4>
+
+                        <p>
+                            The classifier detected textual patterns
+                            associated with real news within the
+                            training dataset.
+                        </p>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+                <!-- HEADLINE -->
+                <div class="analyzed-story">
+
+                    <span class="eyebrow">
+                        STORY UNDER ANALYSIS
+                    </span>
+
+                    <h5>
+                        {% if headline %}
+                            {{ headline }}
+                        {% else %}
+                            Untitled News Article
+                        {% endif %}
+                    </h5>
+
+                </div>
+
+
+                <!-- EDITOR NOTE -->
+                <div class="editor-note">
+
+                    <div class="note-symbol">
+                        i
+                    </div>
+
+                    <div>
+
+                        <strong>EDITOR'S NOTE</strong>
+
+                        <p>
+                            This is an AI/ML classification based
+                            on textual patterns learned from the
+                            training dataset. It does not independently
+                            verify sources, claims, authors, or facts.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+        </section>
+
+        {% endif %}
+
+
+        <!-- HOW IT WORKS -->
+        <section class="method-section">
+
+            <div class="section-title">
+
+                <div class="section-number">
+                    03
+                </div>
+
+                <div>
+                    <span>TECHNOLOGY DESK</span>
+                    <h3>HOW IT WORKS</h3>
+                </div>
+
+                <div class="section-line"></div>
+
+                <small>
+                    CLASSIFICATION PIPELINE
+                </small>
+
+            </div>
+
+
+            <div class="method-grid">
+
+                <div class="method-card">
+
+                    <span>01</span>
+
+                    <h4>NEWS TEXT</h4>
+
+                    <p>
+                        Headline and article content are submitted
+                        to the system.
+                    </p>
+
+                </div>
+
+
+                <div class="method-card">
+
+                    <span>02</span>
+
+                    <h4>TF-IDF</h4>
+
+                    <p>
+                        Text is transformed into numerical features
+                        representing important words and patterns.
+                    </p>
+
+                </div>
+
+
+                <div class="method-card">
+
+                    <span>03</span>
+
+                    <h4>LOGISTIC REGRESSION</h4>
+
+                    <p>
+                        The trained classifier evaluates the extracted
+                        features and calculates class probabilities.
+                    </p>
+
+                </div>
+
+
+                <div class="method-card">
+
+                    <span>04</span>
+
+                    <h4>RESULT</h4>
+
+                    <p>
+                        The system displays the predicted class and
+                        its model confidence.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- STATISTICS -->
+            <div class="stats-row">
+
+                <div>
+                    <span>TEST ACCURACY</span>
+                    <strong>98.65%</strong>
+                </div>
+
+                <div>
+                    <span>TRAINING ARTICLES</span>
+                    <strong>44,898</strong>
+                </div>
+
+                <div>
+                    <span>CLASSIFIER</span>
+                    <strong>LOGISTIC REGRESSION</strong>
+                </div>
+
+                <div>
+                    <span>FEATURES</span>
+                    <strong>TF-IDF</strong>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- DISCLAIMER -->
+        <section class="notice">
+
+            <div class="notice-icon">
+                !
+            </div>
+
+            <div>
+
+                <strong>IMPORTANT NOTICE</strong>
+
+                <p>
+                    TruthScan is an academic AI/ML project.
+                    A REAL classification does not prove that
+                    an article is factually true, and a FAKE
+                    classification does not independently prove
+                    that an article is false. Results are based
+                    on patterns learned from the training dataset.
+                </p>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- FOOTER -->
+    <footer class="newspaper-footer">
+
+        <div class="footer-name">
+            TRUTHSCAN
+        </div>
+
+        <div>
+            AI / ML ACADEMIC PROJECT
+        </div>
+
+        <div>
+            NEWS CLASSIFICATION SYSTEM
+        </div>
+
+    </footer>
+
+</div>
+
+
+<!-- CONFIDENCE BAR -->
+<script>
+    const confidenceBar =
+        document.querySelector(".confidence-fill");
+
+    if (confidenceBar) {
+
+        const confidence =
+            parseFloat(
+                confidenceBar.dataset.confidence
+            );
+
+        if (!isNaN(confidence)) {
+            confidenceBar.style.width =
+                confidence + "%";
+        }
+    }
+</script>
+
+</body>
+</html>
